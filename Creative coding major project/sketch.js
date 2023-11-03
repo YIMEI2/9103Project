@@ -16,7 +16,7 @@
  	randomSeed(seed);
  	mySize = 900;
  	createCanvas(600,800);
-	colorselet[0] = "#1a1a1a";
+ 	colorselet[0] = "#1a1a1a";
  	colorselet[1] = "#abadc5";
  	colorselet[2] = "#abbcc3";
 	colorselet[3] = "#bfd1b2";
@@ -29,9 +29,20 @@
  	color2 = random(colorselet);
  	plus = 0;
  	filter1 = new makeFilter(); // Create a filter object
+	
+	for(let i=0;i<150;i++)
+	{
+		generate();
+	}
  }
 
- function draw() {
+function draw()
+{
+	
+}
+
+
+ function generate() {
  	randomSeed(seed); // Set the random seed
  	noiseSeed(seed); // Set the noise seed
 
@@ -67,7 +78,6 @@
  		rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25),  random(mySize / 2, mySize / 20), plus);
  	}
 	pop();
-
 	// Adjust stroke weight
  	if (str_wei < 0.5) {
  		str_wei += 0.1;
@@ -78,14 +88,14 @@
  		plus += 0.01;
  	} 
 	else 
-	{ 
+	{
 		// Remove shadows and create a final frame
  		drawingContext.shadowColor = random(colorselet);
  		drawingContext.shadowOffsetX = 0;
  		drawingContext.shadowOffsetY = 0;
  		drawingContext.shadowBlur = 0;
 
-        // Display the final frame
+ 		// Display the final frame
  		noLoop();
  		noLoop();
  		blendMode(BLEND);
@@ -116,21 +126,18 @@ function makeFilter() {
 	}
 	overAllTexture.updatePixels();
 }
-
 // Function to draw an over pattern
 function drawOverPattern() {
 	push();
 	translate(width / 2, height / 2);
 	let s = max(width, height) / 1 * sqrt(3) - 2;
 	let n = 6;
-
-	//Loop to divide and draw triangles
+   //Loop to divide and draw triangles
 	for (let theta = TWO_PI / 6; theta < TWO_PI; theta += TWO_PI / 6) { 
 		divideOP(0, 0, s * cos(theta), s * sin(theta), s * cos(theta + TWO_PI / 6), s * sin(theta + TWO_PI / 6), n);
 	}
 	pop();
 }
-
 //Function to calculate a proportional point
 function prop(x1, y1, x2, y2, k) {
 	let x3 = (1 - k) * x1 + k * x2;

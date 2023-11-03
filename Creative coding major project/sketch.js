@@ -27,23 +27,23 @@ function setup() {
   color1 = random(colorselet);
   color2 = random(colorselet);
   plus = 0;
+  push();
   filter1 = new makeFilter();
-  // noLoop();
-  
   for(let i=0;i<150;i++)
   {
-	  generate();
+	  generateBg();
   }
+  pop();
 }
 
-function generate()
+function generateBg()
 {
-	randomSeed(seed); // Set the random seed
+  randomSeed(seed); // Set the random seed
   noiseSeed(seed); // Set the noise seed
 
   noFill();
- push();
- // Loop to draw shapes
+  push();
+  // Loop to draw shapes
   for (let i = 0; i < ranges; i++) 
  {
     strokeWeight(str_wei);
@@ -82,18 +82,20 @@ function generate()
   if (plus * random(35, 50) < 1 * mySize / 8) 
  {
     plus += 0.01;
-  } 
- else 
- { 
+  }
+ else
+ {
    // Remove shadows and create a final frame
     drawingContext.shadowColor = random(colorselet);
     drawingContext.shadowOffsetX = 0;
     drawingContext.shadowOffsetY = 0;
     drawingContext.shadowBlur = 0;
 
-       // Display the final frame
+    // Display the final frame
     //noLoop();
     //noLoop();
+    noLoop();
+    noLoop();
     blendMode(BLEND);
     image(overAllTexture, 0, 0);
     blendMode(ADD);
@@ -107,10 +109,8 @@ function generate()
   }
 }
 
-
 function draw() {
-
-
+  strokeWeight(2);
   //Left Branch
   let apple1 = new Apple(294, 330, 27, PI / 2, { ratio: 0.45, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple1.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
@@ -136,10 +136,10 @@ function draw() {
   let apple8 = new Apple(144, 160, 42, -PI / 40, { ratio: 0.50, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple8.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let apple9 = new Apple(135, 117, 54, PI, { ratio: 0.60, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple9 = new Apple(135, 112, 54, PI, { ratio: 0.60, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple9.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let apple10 = new Apple(144, 65, 54, 0, { ratio: 0.55, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple10 = new Apple(148, 60, 54, 0, { ratio: 0.55, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple10.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
   //Middle Branch
@@ -199,7 +199,7 @@ function draw() {
   apple28.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
 
-  // Middle Rectangle
+// Middle Rectangle
 // Black stroke
   strokeWeight(2);
   stroke(0, 0, 0);
@@ -270,11 +270,15 @@ function draw() {
   let Apple8 = new Apple(305, 429, 80, radians(360), {ratio: 0.6, c1: color(175,67,67), c2: color(12, 133, 88)});
   Apple8.display({ratio: 0.6, c1: color(175,67,67), c2: color(12, 133, 88)});
 
-  let Apple9 = new Apple(300, 365, 50, radians(360), {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
+  let Apple9 = new Apple(300, 367, 44, radians(360), {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
   Apple9.display({ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
+
+
+  fill(123,123,132);
+  strokeWeight(10);
+  line(300,430,285,470)
+
 }
-
-
 
 class Apple {
   constructor(x, y, d, angle, settings) {
@@ -372,33 +376,35 @@ function makeFilter() {
     triangle(x1, y1, x4, y4, x5, y5);
   }
  }
-//Draw a rectangle
+
+ //Draw a rectangle
  class Rect {
   constructor(x, y, w, h, r,g,b) {
     this.x = x;             
     this.y = y;            
     this.w = w;             
     this.h = h;             
-    this.fillColor = color(r, g, b);
+    this.fillColor = color(r, g, b); 
   }
 
-  //Draw a rectangle
+   //Draw a rectangle
   display() {
     fill(this.fillColor);
     rect(this.x, this.y, this.w, this.h);
   }
 }
+
 //Draw an arc
 class Arc {
   constructor(x, y, w, h, start, stop, r, g, b, mode = PIE) {
-    this.x = x;                  
-    this.y = y;                  
-    this.w = w;                  
+    this.x = x;                
+    this.y = y;                
+    this.w = w;                 
     this.h = h;                  
     this.start = start;          
     this.stop = stop;           
     this.fillColor = color(r, g, b);  
-    this.mode = mode;      
+    this.mode = mode;            
   }
 
   //Draw an arc

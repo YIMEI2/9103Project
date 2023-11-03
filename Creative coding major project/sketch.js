@@ -29,26 +29,23 @@ function setup() {
   plus = 0;
   push();
   filter1 = new makeFilter();
-  for(let i=0;i<150;i++)
-  {
-	  generateBg();
+  for (let i = 0; i < 150; i++) {
+    generateBg();
   }
   pop();
 }
 
-function generateBg()
-{
+function generateBg() {
   randomSeed(seed); // Set the random seed
   noiseSeed(seed); // Set the noise seed
 
   noFill();
   push();
   // Loop to draw shapes
-  for (let i = 0; i < ranges; i++) 
- {
+  for (let i = 0; i < ranges; i++) {
     strokeWeight(str_wei);
     stroke(random(colorselet));
-   // Update the horizontal coordinate   'untitled_230710'(SamuelYAN,2023)  https://openprocessing.org/sketch/1969233
+    // Update the horizontal coordinate   'untitled_230710'(SamuelYAN,2023)  https://openprocessing.org/sketch/1969233
     if (ranges % 3 == 0) {
       drawingContext.shadowColor = str(random(colorselet)) + "15";
       drawingContext.shadowOffsetX = str_wei;
@@ -60,32 +57,29 @@ function generateBg()
       drawingContext.shadowOffsetY = str_wei;
       drawingContext.shadowBlur = 0;
     }
-   // Update the horizontal coordinate
-   xCoor = xCoor + 0.05*width;
-   if(xCoor>width)
-   {
-     xCoor=0;
-   }
+    // Update the horizontal coordinate
+    xCoor = xCoor + 0.05 * width;
+    if (xCoor > width) {
+      xCoor = 0;
+    }
     let x = xCoor;
-   // Set line dashes and draw rectangles
-    drawingContext.setLineDash([2, int(random(12, 5))+plus, 3, 2, int(random(1, 4))-plus, 2, int(random(11, 4))+plus, 2]);
-    rect(x - random(4, 10) * sin(random(1, 0.5) * plus), height * random(0.15, 0.85) + mySize / 2 * sin(0.7 * sin(0.5 * plus - 0.5) - 0.5),  random(mySize / 20, mySize / 2), plus);
-    rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25),  random(mySize / 2, mySize / 20), plus);
+    // Set line dashes and draw rectangles
+    drawingContext.setLineDash([2, int(random(12, 5)) + plus, 3, 2, int(random(1, 4)) - plus, 2, int(random(11, 4)) + plus, 2]);
+    rect(x - random(4, 10) * sin(random(1, 0.5) * plus), height * random(0.15, 0.85) + mySize / 2 * sin(0.7 * sin(0.5 * plus - 0.5) - 0.5), random(mySize / 20, mySize / 2), plus);
+    rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25), random(mySize / 2, mySize / 20), plus);
   }
- pop();
+  pop();
 
- // Adjust stroke weight
+  // Adjust stroke weight
   if (str_wei < 0.5) {
     str_wei += 0.1;
   }
-   // Update the 'plus' variable
-  if (plus * random(35, 50) < 1 * mySize / 8) 
- {
+  // Update the 'plus' variable
+  if (plus * random(35, 50) < 1 * mySize / 8) {
     plus += 0.01;
   }
- else
- {
-   // Remove shadows and create a final frame
+  else {
+    // Remove shadows and create a final frame
     drawingContext.shadowColor = random(colorselet);
     drawingContext.shadowOffsetX = 0;
     drawingContext.shadowOffsetY = 0;
@@ -110,9 +104,9 @@ function generateBg()
 }
 
 function draw() {
-  strokeWeight(2);
+  strokeWeight(3);
   //Left Branch
-  let apple1 = new Apple(294, 330, 27, PI / 2, { ratio: 0.45, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple1 = new Apple(294, 330, 27, PI / 2, { ratio: 0.43, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple1.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
   let apple2 = new Apple(266, 335, 32, 3 * PI / 2, { ratio: 0.52, c1: color(12, 133, 88), c2: color(175, 67, 67) });
@@ -133,7 +127,7 @@ function draw() {
   let apple7 = new Apple(180, 174, 36, PI / 2, { ratio: 0.48, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple7.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let apple8 = new Apple(144, 160, 42, -PI / 40, { ratio: 0.50, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple8 = new Apple(144, 160, 42, 0, { ratio: 0.48, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple8.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
   let apple9 = new Apple(135, 112, 54, PI, { ratio: 0.60, c1: color(12, 133, 88), c2: color(175, 67, 67) });
@@ -146,13 +140,13 @@ function draw() {
   let apple11 = new Apple(311, 308, 29, 0, { ratio: 0.50, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple11.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let apple12 = new Apple(313, 272, 45, PI, { ratio: 0.50, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple12 = new Apple(313, 272, 45, PI, { ratio: 0.48, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple12.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let apple13 = new Apple(285, 246, 33, PI / 2, { ratio: 0.50, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple13 = new Apple(285, 246, 33, PI / 2, { ratio: 0.46, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple13.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let apple14 = new Apple(261, 250, 22, 3 * PI / 2, { ratio: 0.40, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple14 = new Apple(261, 250, 22, 3 * PI / 2, { ratio: 0.46, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple14.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
   let apple15 = new Apple(269, 226, 20, 0, { ratio: 0.52, c1: color(12, 133, 88), c2: color(175, 67, 67) });
@@ -165,7 +159,7 @@ function draw() {
   apple17.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
   //Right Branch
-  let apple18 = new Apple(329, 337, 41, 3 * PI / 2, { ratio: 0.52, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple18 = new Apple(329, 337, 41, 3 * PI / 2, { ratio: 0.5, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple18.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
   let apple19 = new Apple(364, 332, 27, 3 * PI / 2, { ratio: 0.60, c1: color(12, 133, 88), c2: color(175, 67, 67) });
@@ -186,7 +180,7 @@ function draw() {
   let apple24 = new Apple(419, 167, 27, PI / 40, { ratio: 0.4, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple24.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let apple25 = new Apple(442, 162, 20, 8 * PI / 5, { ratio: 0.5, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  let apple25 = new Apple(442, 162, 20, 8 * PI / 5, { ratio: 0.4, c1: color(12, 133, 88), c2: color(175, 67, 67) });
   apple25.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
   let apple26 = new Apple(473, 169, 42, 3 * PI / 5, { ratio: 0.5, c1: color(12, 133, 88), c2: color(175, 67, 67) });
@@ -199,16 +193,15 @@ function draw() {
   apple28.display({ c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
 
-// Middle Rectangle
-// Black stroke
-  strokeWeight(2);
-  stroke(0, 0, 0);
+  // Middle Rectangle
+  strokeWeight(3);
+  stroke(25,50,90);
   let middleRect = new Rect(95, 602, 417, 77, 19, 145, 99);
   middleRect.display();
 
   //Soil
-  strokeWeight(2);
-  stroke(0, 0, 0);
+  strokeWeight(3);
+  stroke(25,50,90);
   let soil = new Rect(120, 590, 370, 77, 188, 168, 88);
   soil.display();
 
@@ -246,40 +239,97 @@ function draw() {
   let acr6 = new Arc(455, 666, 70, 50, PI, 0, 12, 133, 88);
   acr6.display();
 
-  let Apple1 = new Apple(210, 580, 60, 29.85, {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
-  Apple1.display({ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
 
-  let Apple2 = new Apple(255, 585, 30, 29.85, {ratio: 0.6, c1: color(175,67,67), c2: color(12, 133, 88)});
-  Apple2.display({ratio: 0.6, c1: color(175,67,67), c2: color(12, 133, 88)});
+  //tree trunk
+  strokeWeight(3);
+  let Apple1 = new Apple(210, 580, 60, 29.85, { ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  Apple1.display({ ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let Apple3 = new Apple(285, 570, 40, PI, {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
-  Apple3.display({ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
+  let Apple2 = new Apple(255, 585, 30, 29.85, { ratio: 0.6, c1: color(175, 67, 67), c2: color(12, 133, 88) });
+  Apple2.display({ ratio: 0.6, c1: color(175, 67, 67), c2: color(12, 133, 88) });
 
-  let Apple4 = new Apple(332, 582, 60, radians(270), {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
-  Apple4.display({ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
+  let Apple3 = new Apple(285, 570, 40, PI, { ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  Apple3.display({ ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let Apple5 = new Apple(392, 582, 60, radians(270), {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
-  Apple5.display({ratio: 0.6, c1: color(175,67,67), c2: color(12, 133, 88)});
+  let Apple4 = new Apple(332, 582, 60, radians(270), { ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  Apple4.display({ ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let Apple6 = new Apple(298, 532, 40, radians(0), {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
-  Apple6.display({ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
+  let Apple5 = new Apple(392, 582, 60, radians(270), { ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  Apple5.display({ ratio: 0.6, c1: color(175, 67, 67), c2: color(12, 133, 88) });
 
-  let Apple7 = new Apple(298, 490, 45, radians(0), {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
-  Apple7.display({ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
+  let Apple6 = new Apple(298, 532, 40, radians(0), { ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  Apple6.display({ ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let Apple8 = new Apple(305, 429, 80, radians(360), {ratio: 0.6, c1: color(175,67,67), c2: color(12, 133, 88)});
-  Apple8.display({ratio: 0.6, c1: color(175,67,67), c2: color(12, 133, 88)});
+  let Apple7 = new Apple(298, 490, 45, radians(0), { ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  Apple7.display({ ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
-  let Apple9 = new Apple(300, 367, 44, radians(360), {ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
-  Apple9.display({ratio: 0.6, c1: color(12, 133, 88), c2: color(175,67,67)});
+  let Apple8 = new Apple(305, 429, 80, radians(360), { ratio: 0.6, c1: color(175, 67, 67), c2: color(12, 133, 88) });
+  Apple8.display({ ratio: 0.6, c1: color(175, 67, 67), c2: color(12, 133, 88) });
+
+  let Apple9 = new Apple(300, 367, 44, radians(360), { ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
+  Apple9.display({ ratio: 0.6, c1: color(12, 133, 88), c2: color(175, 67, 67) });
 
 
-  fill(123,123,132);
-  strokeWeight(10);
-  line(300,430,285,470)
+  //line branches
+  let line1 = new lines(292, 590, 292, 338)
+  line1.display()
+
+  let line2 = new lines(180, 335, 413, 335)
+  line2.display()
+
+  let line3 = new lines(180, 335, 195, 177)
+  line3.display()
+
+  let line4 = new lines(195, 177, 147, 177)
+  line4.display()
+
+  let line5 = new lines(147, 177, 142, 38)
+  line5.display()
+
+  let line6 = new lines(413, 335, 426, 154)
+  line6.display()
+
+  let line7 = new lines(426, 154, 520, 180)
+  line7.display()
+
+  let line8 = new lines(520, 180, 520, 140)
+  line8.display()
+
+  let line9 = new lines(310, 335, 310, 253)
+  line9.display()
+
+  let line10 = new lines(251, 250, 355, 250)
+  line10.display()
+
+  let line11 = new lines(268, 250, 268, 219)
+  line11.display()
+
+  let line12 = new lines(355, 250, 355, 217)
+  line12.display()
+
+  let line13 = new lines(181,590,420,590)
+  line13.display()
 
 }
 
+//line class for branch
+class lines {
+  constructor(x1, y1, x2, y2) {
+    this.x1 = x1;
+    this.x2 = x2;
+    this.y1 = y1;
+    this.y2 = y2;
+  }
+  display() {
+    push()
+    strokeWeight(4)
+    stroke(188, 168, 88)
+    line(this.x1, this.y1, this.x2, this.y2)
+    pop()
+  }
+}
+
+//class of apple
 class Apple {
   constructor(x, y, d, angle, settings) {
     this.x = x;
@@ -293,7 +343,7 @@ class Apple {
     push();
     translate(this.x, this.y)
     rotate(this.angle)
-    stroke(0);
+    stroke(25,50,90);
     fill(settings.c1);
     arc(0, 0, this.d, this.d, -(PI * (1 - this.ratio)) + PI, (PI * (1 - this.ratio)) + PI, OPEN, CHORD);
     fill(settings.c2);
@@ -309,39 +359,39 @@ function makeFilter() {
   drawingContext.shadowColor = color(0, 0, 5, 95);
   overAllTexture = createGraphics(width, height);
   overAllTexture.loadPixels();
-  for (var i = 0; i < width; i++) { 
+  for (var i = 0; i < width; i++) {
     for (var j = 0; j < height; j++) {
       overAllTexture.set(i, j,
-            color(0, 0, random(95, 85), noise(i / 3, j / 3, (i * j) / 150) * random(5, 15) / 2));
+        color(0, 0, random(95, 85), noise(i / 3, j / 3, (i * j) / 150) * random(5, 15) / 2));
     }
   }
   overAllTexture.updatePixels();
- }
- 
- // Function to draw an over pattern
- function drawOverPattern() {
+}
+
+// Function to draw an over pattern
+function drawOverPattern() {
   push();
   translate(width / 2, height / 2);
   let s = max(width, height) / 1 * sqrt(3) - 2;
   let n = 6;
- 
+
   //Loop to divide and draw triangles
-  for (let theta = TWO_PI / 6; theta < TWO_PI; theta += TWO_PI / 6) { 
+  for (let theta = TWO_PI / 6; theta < TWO_PI; theta += TWO_PI / 6) {
     divideOP(0, 0, s * cos(theta), s * sin(theta), s * cos(theta + TWO_PI / 6), s * sin(theta + TWO_PI / 6), n);
   }
   pop();
- }
- 
- //Function to calculate a proportional point
- function prop(x1, y1, x2, y2, k) {
+}
+
+//Function to calculate a proportional point
+function prop(x1, y1, x2, y2, k) {
   let x3 = (1 - k) * x1 + k * x2;
   let y3 = (1 - k) * y1 + k * y2;
   return [x3, y3];
- }
- 
- //reference: 'Rainy day-3' (SamuelYAN,2023)  https://openprocessing.org/sketch/2019293 
- //Function to divide and draw triangles
- function divideOP(x1, y1, x2, y2, x3, y3, n) {
+}
+
+//reference: 'Rainy day-3' (SamuelYAN,2023)  https://openprocessing.org/sketch/2019293 
+//Function to divide and draw triangles
+function divideOP(x1, y1, x2, y2, x3, y3, n) {
   if (n > 1) {
     let [xA, yA] = prop(x1, y1, x2, y2, 1 / 3);
     let [xB, yB] = prop(x1, y1, x2, y2, 2 / 3);
@@ -362,32 +412,33 @@ function makeFilter() {
   } else {
     makeTriangle([x1, y1], [x2, y2], [x3, y3]);
   }
- }
- // Function to draw a triangle
- function makeTriangle(v1, v2, v3) {
+}
+
+// Function to draw a triangle
+function makeTriangle(v1, v2, v3) {
   let points = shuffle([v1, v2, v3]);
   let [x1, y1] = points[0];
   let [x2, y2] = points[1];
   let [x3, y3] = points[2];
   let iStep = 1 / (pow(2, floor(random(4, 2))));
-  for (let i = 0; i < 1; i += iStep) { 
+  for (let i = 0; i < 1; i += iStep) {
     let [x4, y4] = prop(x1, y1, x2, y2, 1 - i);
     let [x5, y5] = prop(x1, y1, x3, y3, 1 - i);
     triangle(x1, y1, x4, y4, x5, y5);
   }
- }
+}
 
- //Draw a rectangle
- class Rect {
-  constructor(x, y, w, h, r,g,b) {
-    this.x = x;             
-    this.y = y;            
-    this.w = w;             
-    this.h = h;             
-    this.fillColor = color(r, g, b); 
+//Draw a rectangle
+class Rect {
+  constructor(x, y, w, h, r, g, b) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.fillColor = color(r, g, b);
   }
 
-   //Draw a rectangle
+  //Draw a rectangle
   display() {
     fill(this.fillColor);
     rect(this.x, this.y, this.w, this.h);
@@ -397,14 +448,14 @@ function makeFilter() {
 //Draw an arc
 class Arc {
   constructor(x, y, w, h, start, stop, r, g, b, mode = PIE) {
-    this.x = x;                
-    this.y = y;                
-    this.w = w;                 
-    this.h = h;                  
-    this.start = start;          
-    this.stop = stop;           
-    this.fillColor = color(r, g, b);  
-    this.mode = mode;            
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.start = start;
+    this.stop = stop;
+    this.fillColor = color(r, g, b);
+    this.mode = mode;
   }
 
   //Draw an arc

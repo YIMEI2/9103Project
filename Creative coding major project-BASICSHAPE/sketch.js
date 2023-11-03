@@ -28,16 +28,27 @@ function setup()
   color1 = random(colorselet);
   color2 = random(colorselet);
   plus = 0;
+  push();
   filter1 = new makeFilter(); // Create a filter object
+  for(let i=0;i<150;i++)
+  {
+	  generateBg();
+  }
+  pop();
 }
 
 function draw() {
+  
+}
+
+function generateBg()
+{
   randomSeed(seed); // Set the random seed
   noiseSeed(seed); // Set the noise seed
 
   noFill();
- push();
- // Loop to draw shapes
+  push();
+  // Loop to draw shapes
   for (let i = 0; i < ranges; i++) 
  {
     strokeWeight(str_wei);
@@ -66,7 +77,7 @@ function draw() {
     rect(x - random(4, 10) * sin(random(1, 0.5) * plus), height * random(0.15, 0.85) + mySize / 2 * sin(0.7 * sin(0.5 * plus - 0.5) - 0.5),  random(mySize / 20, mySize / 2), plus);
     rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25),  random(mySize / 2, mySize / 20), plus);
   }
- pop();
+  pop();
 
  // Adjust stroke weight
   if (str_wei < 0.5) {

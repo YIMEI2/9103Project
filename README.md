@@ -8,5 +8,7 @@ By integrating natural audio elements, the personal audio component of the "Appl
 
 The personal audio component places a strong emphasis on user interaction with the artwork through sound, underscoring the participants' involvement in the entire art experience.
 
+[YouTube demo video](https://www.youtube.com/watch?v=_Ru6XkFO7HA)
+
 ## Demo
 ### <a href="https://yimei2.github.io/9103Project/Creative coding major project/index.html">Demo ▶️</a>

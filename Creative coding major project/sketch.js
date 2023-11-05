@@ -14,6 +14,7 @@ let step=0;
 
 let xCoor = 0;
 
+//array for store brach and solid objects
 let apples=[];
 let treeLines=[];
 let treeArcs=[];
@@ -21,21 +22,25 @@ let treeSolid=[];
 let appleShowIndex=0;
 let lastShowFrameCount=0;
 
+//transparency control
+let baseTransparency = 255;
+let branchTransparency = 255;
+
 let couldFallAppleIndex=[];
 let blowFallAccuStrength = 0;
 let fallAppleIndex=-1;
 
-let mic;
+//show apple slogon index
+let fallAppleSlogon=0;
 
-let song1;
+let mic; //using mic
+
+//bg song
 let song2;
-let song3;
 
 function preload() 
 {
-	song1 = loadSound("./asset/song1.mp3");
     song2 = loadSound("./asset/song2.mp3");
-    song3 = loadSound("./asset/song3.mp3");
 }
 
 function setup() 
@@ -60,17 +65,19 @@ function setup()
  
     
   filter1 = new makeFilter();
-    
+  //set apple sloid and brach objects
   setApples();
   setTreeSolids();  
   setTreeArcs();    
   setTreeLines();    
     
   print(apples.length);
-
+    
+  //open mic
   mic = new p5.AudioIn();
   mic.start();
 
+  //set fix framerate
   frameRate(30);
     
 }
@@ -78,6 +85,7 @@ function setup()
 
 function draw() 
 {
+  
   image(bgPg,0,0);
     
   if(step==0)
@@ -96,7 +104,7 @@ function draw()
     if (mouseIsPressed === true)
     {
         step=1;
-        song1.loop();
+        song2.loop();
         lastShowFrameCount = frameCount;
     }
   } 
@@ -114,12 +122,22 @@ function draw()
       {
           step=2;
           colorMode(RGB);
-          song1.stop();
-          song2.loop();
+          baseTransparency=0;
+          branchTransparency=0;
       }
   }
   else if(step==2)
   {
+    if(baseTransparency<255)
+    {
+        baseTransparency++;
+    }
+    if(branchTransparency<255)
+    {
+        branchTransparency++;
+    }
+
+      
     //ref: https://p5js.org/reference/#/p5.AudioIn
     micLevel = mic.getLevel();
     print(micLevel);
@@ -163,21 +181,24 @@ function draw()
             }
         }
         lastShowFrameCount = frameCount;
-        song2.stop();
-        song3.loop();
     }
     
-    strokeWeight(1);
-    stroke(255);
-    fill(255);
-    textAlign(CENTER);
-    textSize(30);
-    text("Speak to generate apples, click to start.",width/2,height-60);
+    if(branchTransparency>250)
+    {
+        strokeWeight(1);
+        stroke(255);
+        fill(255);
+        textAlign(CENTER);
+        textSize(30);
+        text("Speak to generate apples, click to start.",width/2,height-60);
+    }
+    
   }
   
   if(step==3)
   {
     micLevel = mic.getLevel();
+    //apple fall down
     if(micLevel>0.4 && frameCount - lastShowFrameCount>40)
     {
         let index =int(random(0,couldFallAppleIndex.length));
@@ -186,6 +207,7 @@ function draw()
         
         lastShowFrameCount = frameCount;
         fallAppleIndex = couldFallAppleIndex[index];
+        
     }
       
     stroke(25,50,90);
@@ -211,18 +233,19 @@ function draw()
         treeLines[i].display();
     }
     
+    //show apple slogan
     strokeWeight(1);
     stroke(255);
     fill(255);
     textAlign(CENTER);
     textSize(30);
-    if(fallAppleIndex<0)
+    if(fallAppleSlogon===0)
     {
         text("Now, try to blow the apple tree.",width/2,height-60);
     }
     else{
         
-        let k=fallAppleIndex%3;
+        let k=fallAppleSlogon%3;
         if(k==0){text("You might get a Newton's apple.",width/2,height-60);}
         else if(k==1){text("You might have get a Steve Jobs Apple.",width/2,height-60);}
         else if(k==2){text("You may have received an apple of Eve.",width/2,height-60);}
@@ -243,7 +266,7 @@ class lines {
   display() {
     push()
     strokeWeight(4)
-    stroke(188, 168, 88)
+    stroke(188, 168, 88,branchTransparency)
     line(this.x1, this.y1, this.x2, this.y2)
     pop()
   }
@@ -273,9 +296,10 @@ class Apple {
         {
             this.y+=this.fallSpeed;
         }
-        if(this.y+this.d/2 >= height)
+        if(this.y+this.d/2 >= 602)
         {
             this.fall = 2;
+            fallAppleSlogon++;
         }
     }
   }
@@ -367,7 +391,7 @@ function setTreeArcs()
 }
 function setTreeSolids()
 {
-  treeSolid.push(new Rect(95, 602, 417, 77, 19, 145, 99));
+  treeSolid.push(new Rect(0, 602, width, 77, 19, 145, 99));
   treeSolid.push(new Rect(120, 590, 370, 77, 188, 168, 88));
   treeSolid.push(new Rect(120, 590, 60, 77, 188, 168, 88));
   treeSolid.push(new Rect(180, 590, 60, 77, 175, 67, 67));

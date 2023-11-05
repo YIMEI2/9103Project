@@ -8,6 +8,7 @@ let color1, color2;
 let colorselet = [];
 let plus, margin;
 let filter1;
+let bgPg;
 
 let step=0;
 
@@ -19,6 +20,9 @@ let treeArcs=[];
 let treeSolid=[];
 let appleShowIndex=0;
 let lastShowFrameCount=0;
+
+let couldFallAppleIndex=[];
+let blowFallAccuStrength = 0;
 
 let mic;
 
@@ -34,13 +38,15 @@ function setup()
   colorselet[2] = "#abbcc3";
   colorselet[3] = "#bfd1b2";
   colorselet[4] = "#7f9faf";
+  bgPg = createGraphics(width, height);
 
-  background("#003153");
+  bgPg.background("#003153");
   margin = mySize / 50;
   ranges = int(random(10, 20));
   color1 = random(colorselet);
   color2 = random(colorselet);
   plus = 0;
+ 
     
   filter1 = new makeFilter();
     
@@ -61,7 +67,7 @@ function setup()
 
 function draw() 
 {
-    
+  image(bgPg,0,0);
   if(step==0)
   {
      if(frameCount<150) //time control
@@ -113,14 +119,65 @@ function draw()
       
     if(appleShowIndex>=apples.length)
     {
-        step==2;
+        step=2;
+        for (let i = 0; i < apples.length ; i++) 
+        {
+            if(apples[i].y<height/2)
+            {
+                 couldFallAppleIndex.push(i);
+            }
+        }
+        lastShowFrameCount = frameCount;
     }
     
+    stroke(255);
+    fill(255);
     textAlign(CENTER);
     textSize(20);
     text("Singing to generate apples, click to start.",width/2,height-60);
   }
   
+  if(step==2)
+  {
+    micLevel = mic.getLevel();
+    if(micLevel>0.4 && frameCount - lastShowFrameCount>40)
+    {
+        let index =int(random(0,couldFallAppleIndex.length));
+        apples[couldFallAppleIndex[index]].setFall();
+        couldFallAppleIndex.splice(index,1);
+        
+        lastShowFrameCount = frameCount;
+    }
+      
+    stroke(25,50,90);
+    strokeWeight(3);
+    for (let i = 0; i < apples.length && i < appleShowIndex; i++) 
+    {
+        apples[i].update();
+        apples[i].display();
+    }
+    
+    stroke(25,50,90);
+    for (let i = 0; i < treeSolid.length; i++) 
+    {
+        treeSolid[i].display();
+    }
+    for (let i = 0; i < treeArcs.length; i++) 
+    {
+        treeArcs[i].display();
+    }
+      
+    for (let i = 0; i < treeLines.length; i++) 
+    {
+        treeLines[i].display();
+    }
+      
+    stroke(255);
+    fill(255);
+    textAlign(CENTER);
+    textSize(20);
+    text("Try blowing the apple tree.",width/2,height-60);
+  }
   
 
 }
@@ -150,9 +207,31 @@ class Apple {
     this.d = d;
     this.angle = angle;
     this.settings = _settings;
+    this.fall=0;
+    this.fallSpeed = random(3,7);
+  }
+    
+  setFall()
+  {
+       this.fall=1;
+  }
+  update()
+  {
+    if(this.fall==1)
+    {
+        if(this.y+this.d/2 < height)
+        {
+            this.y+=this.fallSpeed;
+        }
+        if(this.y+this.d/2 >= height)
+        {
+            this.fall = 2;
+        }
+    }
   }
 
-  display() {
+  display() 
+  {
     push();
     translate(this.x, this.y)
     rotate(this.angle)
@@ -163,7 +242,6 @@ class Apple {
     arc(0, 0, this.d, this.d, -PI * this.settings.ratio, PI * this.settings.ratio, OPEN, CHORD);
     pop();
   }
-
 }
 
 function setApples()
@@ -256,8 +334,8 @@ function compareObjects(a, b) {
 
 // Filter constructor   Code Inspiration Source.：https://p5js.org/reference/#/p5/filter
 function makeFilter() {
-  colorMode(HSB, 360, 100, 100, 100);
-  drawingContext.shadowColor = color(0, 0, 5, 95);
+  bgPg.colorMode(HSB, 360, 100, 100, 100);
+  bgPg.drawingContext.shadowColor = color(0, 0, 5, 95);
   overAllTexture = createGraphics(width, height);
   overAllTexture.loadPixels();
   for (var i = 0; i < width; i++) {
@@ -271,8 +349,8 @@ function makeFilter() {
 
 // Function to draw an over pattern
 function drawOverPattern() {
-  push();
-  translate(width / 2, height / 2);
+  bgPg.push();
+  bgPg.translate(width / 2, height / 2);
   let s = max(width, height) / 1 * sqrt(3) - 2;
   let n = 6;
 
@@ -280,7 +358,7 @@ function drawOverPattern() {
   for (let theta = TWO_PI / 6; theta < TWO_PI; theta += TWO_PI / 6) {
     divideOP(0, 0, s * cos(theta), s * sin(theta), s * cos(theta + TWO_PI / 6), s * sin(theta + TWO_PI / 6), n);
   }
-  pop();
+  bgPg.pop();
 }
 
 //Function to calculate a proportional point
@@ -325,7 +403,7 @@ function makeTriangle(v1, v2, v3) {
   for (let i = 0; i < 1; i += iStep) {
     let [x4, y4] = prop(x1, y1, x2, y2, 1 - i);
     let [x5, y5] = prop(x1, y1, x3, y3, 1 - i);
-    triangle(x1, y1, x4, y4, x5, y5);
+    bgPg.triangle(x1, y1, x4, y4, x5, y5);
   }
 }
 
@@ -371,23 +449,23 @@ function generateBg() {
   randomSeed(seed); // Set the random seed
   noiseSeed(seed); // Set the noise seed
 
-  noFill();
-  push();
+  bgPg.noFill();
+  bgPg.push();
   // Loop to draw shapes
   for (let i = 0; i < ranges; i++) {
-    strokeWeight(str_wei);
-    stroke(random(colorselet));
+    bgPg.strokeWeight(str_wei);
+    bgPg.stroke(random(colorselet));
     // Update the horizontal coordinate   'untitled_230710'(SamuelYAN,2023)  https://openprocessing.org/sketch/1969233
     if (ranges % 3 == 0) {
-      drawingContext.shadowColor = str(random(colorselet)) + "15";
-      drawingContext.shadowOffsetX = str_wei;
-      drawingContext.shadowOffsetY = str_wei;
-      drawingContext.shadowBlur = 0;
+      bgPg.drawingContext.shadowColor = str(random(colorselet)) + "15";
+      bgPg.drawingContext.shadowOffsetX = str_wei;
+      bgPg.drawingContext.shadowOffsetY = str_wei;
+      bgPg.drawingContext.shadowBlur = 0;
     } else {
-      drawingContext.shadowColor = str(random(colorselet)) + "15";
-      drawingContext.shadowOffsetX = str_wei;
-      drawingContext.shadowOffsetY = str_wei;
-      drawingContext.shadowBlur = 0;
+      bgPg.drawingContext.shadowColor = str(random(colorselet)) + "15";
+      bgPg.drawingContext.shadowOffsetX = str_wei;
+      bgPg.drawingContext.shadowOffsetY = str_wei;
+      bgPg.drawingContext.shadowBlur = 0;
     }
     // Update the horizontal coordinate
     xCoor = xCoor + 0.05 * width;
@@ -396,11 +474,11 @@ function generateBg() {
     }
     let x = xCoor;
     // Set line dashes and draw rectangles
-    drawingContext.setLineDash([2, int(random(12, 5)) + plus, 3, 2, int(random(1, 4)) - plus, 2, int(random(11, 4)) + plus, 2]);
-    rect(x - random(4, 10) * sin(random(1, 0.5) * plus), height * random(0.15, 0.85) + mySize / 2 * sin(0.7 * sin(0.5 * plus - 0.5) - 0.5), random(mySize / 20, mySize / 2), plus);
-    rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25), random(mySize / 2, mySize / 20), plus);
+    bgPg.drawingContext.setLineDash([2, int(random(12, 5)) + plus, 3, 2, int(random(1, 4)) - plus, 2, int(random(11, 4)) + plus, 2]);
+    bgPg.rect(x - random(4, 10) * sin(random(1, 0.5) * plus), height * random(0.15, 0.85) + mySize / 2 * sin(0.7 * sin(0.5 * plus - 0.5) - 0.5), random(mySize / 20, mySize / 2), plus);
+    bgPg.rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25), random(mySize / 2, mySize / 20), plus);
   }
-  pop();
+  bgPg.pop();
 
   // Adjust stroke weight
   if (str_wei < 0.5) {
@@ -412,25 +490,23 @@ function generateBg() {
   }
   else {
     // Remove shadows and create a final frame
-    drawingContext.shadowColor = random(colorselet);
-    drawingContext.shadowOffsetX = 0;
-    drawingContext.shadowOffsetY = 0;
-    drawingContext.shadowBlur = 0;
+    bgPg.bgPg.drawingContext.shadowColor = random(colorselet);
+    bgPg.drawingContext.shadowOffsetX = 0;
+    bgPg.drawingContext.shadowOffsetY = 0;
+    bgPg.drawingContext.shadowBlur = 0;
 
     // Display the final frame
-    //noLoop();
-    //noLoop();
     noLoop();
     noLoop();
-    blendMode(BLEND);
-    image(overAllTexture, 0, 0);
-    blendMode(ADD);
-    strokeWeight(random(0.10, 0.5) / 2);
-    stroke(str(random(colorselet)) + "05");
-    noFill();
-    drawingContext.setLineDash([2, 1, 2, 3]);
-    drawOverPattern();
-    drawingContext.setLineDash([1, 1, 1, 1]);
-    blendMode(BLEND);
+    bgPg.blendMode(BLEND);
+    bgPg.image(overAllTexture, 0, 0);
+    bgPg.blendMode(ADD);
+    bgPg.strokeWeight(random(0.10, 0.5) / 2);
+    bgPg.stroke(str(random(colorselet)) + "05");
+    bgPg.noFill();
+    bgPg.drawingContext.setLineDash([2, 1, 2, 3]);
+    bgPg.drawOverPattern();
+    bgPg.drawingContext.setLineDash([1, 1, 1, 1]);
+    bgPg.blendMode(BLEND);
   }
 }

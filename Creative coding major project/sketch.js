@@ -17,12 +17,18 @@ let apples=[];
 let treeLines=[];
 let treeArcs=[];
 let treeSolid=[];
+let appleShowIndex=0;
+let lastShowFrameCount=0;
+
+let mic;
+
 
 function setup() 
 {
   randomSeed(seed);
   mySize = 900;
-  createCanvas(600, 800);
+  let cnv = createCanvas(600, 800);
+  cnv.mousePressed(userStartAudio);
   colorselet[0] = "#1a1a1a";
   colorselet[1] = "#abadc5";
   colorselet[2] = "#abbcc3";
@@ -45,75 +51,13 @@ function setup()
     
   print(apples.length);
 
+  mic = new p5.AudioIn();
+  mic.start();
+
+  frameRate(30);
 }
 
-function generateBg() {
-  randomSeed(seed); // Set the random seed
-  noiseSeed(seed); // Set the noise seed
 
-  noFill();
-  push();
-  // Loop to draw shapes
-  for (let i = 0; i < ranges; i++) {
-    strokeWeight(str_wei);
-    stroke(random(colorselet));
-    // Update the horizontal coordinate   'untitled_230710'(SamuelYAN,2023)  https://openprocessing.org/sketch/1969233
-    if (ranges % 3 == 0) {
-      drawingContext.shadowColor = str(random(colorselet)) + "15";
-      drawingContext.shadowOffsetX = str_wei;
-      drawingContext.shadowOffsetY = str_wei;
-      drawingContext.shadowBlur = 0;
-    } else {
-      drawingContext.shadowColor = str(random(colorselet)) + "15";
-      drawingContext.shadowOffsetX = str_wei;
-      drawingContext.shadowOffsetY = str_wei;
-      drawingContext.shadowBlur = 0;
-    }
-    // Update the horizontal coordinate
-    xCoor = xCoor + 0.05 * width;
-    if (xCoor > width) {
-      xCoor = 0;
-    }
-    let x = xCoor;
-    // Set line dashes and draw rectangles
-    drawingContext.setLineDash([2, int(random(12, 5)) + plus, 3, 2, int(random(1, 4)) - plus, 2, int(random(11, 4)) + plus, 2]);
-    rect(x - random(4, 10) * sin(random(1, 0.5) * plus), height * random(0.15, 0.85) + mySize / 2 * sin(0.7 * sin(0.5 * plus - 0.5) - 0.5), random(mySize / 20, mySize / 2), plus);
-    rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25), random(mySize / 2, mySize / 20), plus);
-  }
-  pop();
-
-  // Adjust stroke weight
-  if (str_wei < 0.5) {
-    str_wei += 0.1;
-  }
-  // Update the 'plus' variable
-  if (plus * random(35, 50) < 1 * mySize / 8) {
-    plus += 0.01;
-  }
-  else {
-    // Remove shadows and create a final frame
-    drawingContext.shadowColor = random(colorselet);
-    drawingContext.shadowOffsetX = 0;
-    drawingContext.shadowOffsetY = 0;
-    drawingContext.shadowBlur = 0;
-
-    // Display the final frame
-    //noLoop();
-    //noLoop();
-    noLoop();
-    noLoop();
-    blendMode(BLEND);
-    image(overAllTexture, 0, 0);
-    blendMode(ADD);
-    strokeWeight(random(0.10, 0.5) / 2);
-    stroke(str(random(colorselet)) + "05");
-    noFill();
-    drawingContext.setLineDash([2, 1, 2, 3]);
-    drawOverPattern();
-    drawingContext.setLineDash([1, 1, 1, 1]);
-    blendMode(BLEND);
-  }
-}
 
 function draw() 
 {
@@ -124,7 +68,7 @@ function draw()
      {
          if(frameCount%3==0) //generate once every 3 frames
          {
-            //generateBg();
+            generateBg();
          }
         
      }
@@ -136,9 +80,18 @@ function draw()
   }
   else if(step==1)
   {
+    //ref: https://p5js.org/reference/#/p5.AudioIn
+    micLevel = mic.getLevel();
+    if(appleShowIndex<apples.length && micLevel>0.4 && frameCount - lastShowFrameCount>20)
+    {
+      appleShowIndex+=1;
+    }
+    //let y = height - micLevel * height;
+    //ellipse(width/2, y, 10, 10);
+      
     stroke(25,50,90);
     strokeWeight(3);
-    for (let i = 0; i < apples.length; i++) 
+    for (let i = 0; i < apples.length && i < appleShowIndex; i++) 
     {
         apples[i].display();
     }
@@ -157,6 +110,15 @@ function draw()
     {
         treeLines[i].display();
     }
+      
+    if(appleShowIndex>=apples.length)
+    {
+        step==2;
+    }
+    
+    textAlign(CENTER);
+    textSize(20);
+    text("Singing to generate apples, click to start.",width/2,height-60);
   }
   
   
@@ -289,7 +251,7 @@ function setTreeSolids()
 
 
 function compareObjects(a, b) {
-  return a.y - b.y;
+  return b.y - a.y;
 }
 
 // Filter constructor   Code Inspiration Source.：https://p5js.org/reference/#/p5/filter
@@ -402,5 +364,73 @@ class Arc {
     fill(this.fillColor);
     noStroke();
     arc(this.x, this.y, this.w, this.h, this.start, this.stop, this.mode);
+  }
+}
+
+function generateBg() {
+  randomSeed(seed); // Set the random seed
+  noiseSeed(seed); // Set the noise seed
+
+  noFill();
+  push();
+  // Loop to draw shapes
+  for (let i = 0; i < ranges; i++) {
+    strokeWeight(str_wei);
+    stroke(random(colorselet));
+    // Update the horizontal coordinate   'untitled_230710'(SamuelYAN,2023)  https://openprocessing.org/sketch/1969233
+    if (ranges % 3 == 0) {
+      drawingContext.shadowColor = str(random(colorselet)) + "15";
+      drawingContext.shadowOffsetX = str_wei;
+      drawingContext.shadowOffsetY = str_wei;
+      drawingContext.shadowBlur = 0;
+    } else {
+      drawingContext.shadowColor = str(random(colorselet)) + "15";
+      drawingContext.shadowOffsetX = str_wei;
+      drawingContext.shadowOffsetY = str_wei;
+      drawingContext.shadowBlur = 0;
+    }
+    // Update the horizontal coordinate
+    xCoor = xCoor + 0.05 * width;
+    if (xCoor > width) {
+      xCoor = 0;
+    }
+    let x = xCoor;
+    // Set line dashes and draw rectangles
+    drawingContext.setLineDash([2, int(random(12, 5)) + plus, 3, 2, int(random(1, 4)) - plus, 2, int(random(11, 4)) + plus, 2]);
+    rect(x - random(4, 10) * sin(random(1, 0.5) * plus), height * random(0.15, 0.85) + mySize / 2 * sin(0.7 * sin(0.5 * plus - 0.5) - 0.5), random(mySize / 20, mySize / 2), plus);
+    rect(x - random(10, 4) * cos(random(0.5, 1) * plus), height * random(0.85, 0.15) - mySize / 2 * sin(0.75 * sin(0.7 * plus - 0.5) - 0.25), random(mySize / 2, mySize / 20), plus);
+  }
+  pop();
+
+  // Adjust stroke weight
+  if (str_wei < 0.5) {
+    str_wei += 0.1;
+  }
+  // Update the 'plus' variable
+  if (plus * random(35, 50) < 1 * mySize / 8) {
+    plus += 0.01;
+  }
+  else {
+    // Remove shadows and create a final frame
+    drawingContext.shadowColor = random(colorselet);
+    drawingContext.shadowOffsetX = 0;
+    drawingContext.shadowOffsetY = 0;
+    drawingContext.shadowBlur = 0;
+
+    // Display the final frame
+    //noLoop();
+    //noLoop();
+    noLoop();
+    noLoop();
+    blendMode(BLEND);
+    image(overAllTexture, 0, 0);
+    blendMode(ADD);
+    strokeWeight(random(0.10, 0.5) / 2);
+    stroke(str(random(colorselet)) + "05");
+    noFill();
+    drawingContext.setLineDash([2, 1, 2, 3]);
+    drawOverPattern();
+    drawingContext.setLineDash([1, 1, 1, 1]);
+    blendMode(BLEND);
   }
 }

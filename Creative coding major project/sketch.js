@@ -23,9 +23,20 @@ let lastShowFrameCount=0;
 
 let couldFallAppleIndex=[];
 let blowFallAccuStrength = 0;
+let fallAppleIndex=-1;
 
 let mic;
 
+let song1;
+let song2;
+let song3;
+
+function preload() 
+{
+	song1 = loadSound("./asset/song1.mp3");
+    song2 = loadSound("./asset/song2.mp3");
+    song3 = loadSound("./asset/song3.mp3");
+}
 
 function setup() 
 {
@@ -61,16 +72,37 @@ function setup()
   mic.start();
 
   frameRate(30);
+    
 }
-
 
 
 function draw() 
 {
   image(bgPg,0,0);
+    
   if(step==0)
   {
-     if(frameCount<150) //time control
+    background("#003153");
+    strokeWeight(1);
+    stroke(255);
+    fill(255);
+    textAlign(CENTER);
+    textSize(40);
+    text("Apple Tree",width/2,height*0.4);
+      
+    textSize(20);
+    text("Click to start.",width/2,height*0.6);
+      
+    if (mouseIsPressed === true)
+    {
+        step=1;
+        song1.loop();
+        lastShowFrameCount = frameCount;
+    }
+  } 
+  else if(step==1)
+  {
+     if(frameCount - lastShowFrameCount<450) //time control
      {
          if(frameCount%3==0) //generate once every 3 frames
          {
@@ -80,15 +112,18 @@ function draw()
      }
       else
       {
-          step=1;
+          step=2;
           colorMode(RGB);
+          song1.stop();
+          song2.loop();
       }
   }
-  else if(step==1)
+  else if(step==2)
   {
     //ref: https://p5js.org/reference/#/p5.AudioIn
     micLevel = mic.getLevel();
-    if(appleShowIndex<apples.length && micLevel>0.4 && frameCount - lastShowFrameCount>20)
+    print(micLevel);
+    if(appleShowIndex<apples.length && micLevel>0.2 && frameCount - lastShowFrameCount>20)
     {
       appleShowIndex+=1;
     }
@@ -119,7 +154,7 @@ function draw()
       
     if(appleShowIndex>=apples.length)
     {
-        step=2;
+        step=3;
         for (let i = 0; i < apples.length ; i++) 
         {
             if(apples[i].y<height/2)
@@ -128,16 +163,19 @@ function draw()
             }
         }
         lastShowFrameCount = frameCount;
+        song2.stop();
+        song3.loop();
     }
     
+    strokeWeight(1);
     stroke(255);
     fill(255);
     textAlign(CENTER);
-    textSize(20);
-    text("Singing to generate apples, click to start.",width/2,height-60);
+    textSize(30);
+    text("Speak to generate apples, click to start.",width/2,height-60);
   }
   
-  if(step==2)
+  if(step==3)
   {
     micLevel = mic.getLevel();
     if(micLevel>0.4 && frameCount - lastShowFrameCount>40)
@@ -147,6 +185,7 @@ function draw()
         couldFallAppleIndex.splice(index,1);
         
         lastShowFrameCount = frameCount;
+        fallAppleIndex = couldFallAppleIndex[index];
     }
       
     stroke(25,50,90);
@@ -171,12 +210,23 @@ function draw()
     {
         treeLines[i].display();
     }
-      
+    
+    strokeWeight(1);
     stroke(255);
     fill(255);
     textAlign(CENTER);
-    textSize(20);
-    text("Try blowing the apple tree.",width/2,height-60);
+    textSize(30);
+    if(fallAppleIndex<0)
+    {
+        text("Now, try to blow the apple tree.",width/2,height-60);
+    }
+    else{
+        
+        let k=fallAppleIndex%3;
+        if(k==0){text("You might get a Newton's apple.",width/2,height-60);}
+        else if(k==1){text("You might have get a Steve Jobs Apple.",width/2,height-60);}
+        else if(k==2){text("You may have received an apple of Eve.",width/2,height-60);}
+    }
   }
   
 
